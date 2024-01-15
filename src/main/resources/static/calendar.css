@@ -1,0 +1,19 @@
+.fc-toolbar {
+    font-family: Montserrat, sans-serif
+}
+
+body {
+    font-family: varela round, sans-serif
+}
+
+#calendar {
+    max-width: 1200px;
+}
+
+.fc-title {
+    white-space: normal;
+}
+
+.fc-daygrid-event {
+    white-space: normal;
+}

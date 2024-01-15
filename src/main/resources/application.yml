@@ -1,0 +1,9 @@
+calendar:
+  gitlab:
+    url: <GITLAB_URL>
+    token: <GITLAB_TOKEN>
+
+spring:
+  threads:
+    virtual:
+      enabled: true

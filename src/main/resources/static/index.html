@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round|Montserrat:400,700" rel='stylesheet' type="text/css">
+    <link href="/calendar.css" rel="stylesheet"/>
+
+    <script src='/webjars/fullcalendar/6.1.9/index.global.min.js'></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarDiv = document.getElementById('calendar');
+            const initialDate = new URLSearchParams(window.location.search).get('initialDate')
+            const calendar = new FullCalendar.Calendar(calendarDiv, {
+                initialView: 'dayGridMonth',
+                initialDate: initialDate,
+                headerToolbar: {
+                    left: 'today prev,next',
+                    center: 'title',
+                    right: 'dayGridMonth,listMonth'
+                },
+                buttonText: {
+                    today: 'Today',
+                    month: 'Grid',
+                    list: 'List'
+                },
+                allDayText: '',
+                height: 'auto'
+            });
+            calendar.addEventSource('/releases');
+            calendar.render();
+        });
+    </script>
+    <title>GitLab Calendar</title>
+</head>
+<body>
+    <div id='calendar'></div>
+</body>
+</html>
