@@ -11,7 +11,7 @@ The project is developed using Spring Boot 3.2.0 and Java 21.
 - GitLab account with a user (bot) and a token for authentication.
 
 ### Installation Steps
-1. Clone the repository: `git clone https://github.com/yourname/GitLab-Calendar.git`
+1. Clone the repository: `git clone https://github.com/ftabino/gitlab-calendar.git`
 2. Modify the `application.yml` file with the following configurations:
    ```yaml
    calendar:
