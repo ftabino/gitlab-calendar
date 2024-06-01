@@ -4,6 +4,8 @@ calendar:
     token: <GITLAB_TOKEN>
 
 spring:
+  application:
+    name: Gitlab Calendar
   threads:
     virtual:
       enabled: true
