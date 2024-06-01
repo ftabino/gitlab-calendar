@@ -17,9 +17,9 @@
 package dev.ftabino.calendar.gitlab;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
 
 /**
  * Configuration for GitLab-related functionality.
@@ -37,8 +37,8 @@ class GitLabConfiguration {
     }
 
     @Bean
-    GitLabOperations gitLabOperations(RestTemplateBuilder restTemplateBuilder) {
-        return new GitLabTemplate(gitLabProperties.url(), gitLabProperties.token(), new RegexLinkParser(), restTemplateBuilder);
+    GitLabOperations gitLabOperations(RestClient.Builder builder) {
+        return new GitLabTemplate(gitLabProperties.url(), gitLabProperties.token(), new RegexLinkParser(), builder);
     }
 
     @Bean

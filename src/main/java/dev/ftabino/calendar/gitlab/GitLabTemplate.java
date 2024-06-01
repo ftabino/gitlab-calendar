@@ -16,11 +16,10 @@
 
 package dev.ftabino.calendar.gitlab;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -34,29 +33,25 @@ import java.util.function.Supplier;
  */
 final class GitLabTemplate implements GitLabOperations {
 
-    private final RestOperations rest;
+    private final RestClient restClient;
 
     private final LinkParser linkParser;
 
     /**
      * Creates a new {@code GitLabTemplate} that will use the given {@code url} as a root URL,
      * and the given {@code linkParser} to parse links from responses' {@code Link} header.
-     * It will use a {@link RestTemplate} created from the given {@code restTemplateBuilder}.
+     * It will use a {@link RestClient} created from the given {@code builder}.
      *
-     * @param url                 the root uri
-     * @param linkParser          the link parser
-     * @param restTemplateBuilder the builder
+     * @param url        the root uri
+     * @param linkParser the link parser
+     * @param builder    the restClient builder
      */
-    GitLabTemplate(String url, String token, LinkParser linkParser, RestTemplateBuilder restTemplateBuilder) {
-
+    GitLabTemplate(String url, String token, LinkParser linkParser, RestClient.Builder builder) {
         if (StringUtils.hasText(url)) {
-            restTemplateBuilder = restTemplateBuilder.rootUri(url);
+            builder.baseUrl(url);
         }
-
-        rest = restTemplateBuilder.additionalInterceptors((request, body, execution) -> {
-            request.getHeaders().add("Authorization", "Bearer " + token);
-            return execution.execute(request, body);
-        }).build();
+        restClient = builder.defaultHeader("Authorization", "Bearer " + token)
+                            .build();
 
         this.linkParser = linkParser;
     }
@@ -102,14 +97,20 @@ final class GitLabTemplate implements GitLabOperations {
             if (!StringUtils.hasText(url)) {
                 return null;
             }
-            HttpHeaders headers = new HttpHeaders();
-            if (earlierResponse != null && (earlierResponse.next() != null || earlierResponse.getContent().size() != 100)) {
-                headers.setIfNoneMatch(earlierResponse.getEtag());
-            }
 
-            HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+            ResponseEntity<T[]> response =
+                    restClient.get()
+                              .uri(url)
+                              .headers(httpHeaders -> {
+                                  if (earlierResponse != null && (earlierResponse.next() != null || earlierResponse
+                                          .getContent()
+                                          .size() != 100)) {
+                                      httpHeaders.setIfNoneMatch(earlierResponse.getEtag());
+                                  }
+                              })
+                              .retrieve()
+                              .toEntity(type);
 
-            ResponseEntity<T[]> response = rest.exchange(url, HttpMethod.GET, requestEntity, type);
             if (response.getStatusCode() == HttpStatus.NOT_MODIFIED && earlierResponse != null) {
                 Page<T> nextEarlierResponse = earlierResponse.next();
                 return new StandardPage<>(earlierResponse.getContent(), url, earlierResponse.getEtag(),

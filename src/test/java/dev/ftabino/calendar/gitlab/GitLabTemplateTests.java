@@ -21,12 +21,12 @@ import dev.ftabino.calendar.test.TestMethodResponseTestExecutionListener;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -52,12 +52,9 @@ class GitLabTemplateTests {
     @Autowired
     private TestMethodResponseCreator testMethodResponse;
 
-    @Autowired
-    RestTemplateBuilder restTemplateBuilder;
-
     @Test
     void shouldGetProjects() {
-        server.expect(requestTo("/api/v4/projects"))
+        server.expect(requestTo("http://gitlab.ftabino.it/api/v4/projects"))
               .andRespond(testMethodResponse);
         var page = gitLab.getProjects();
         assertThat(page.getContent()).hasSize(2);
@@ -67,7 +64,7 @@ class GitLabTemplateTests {
 
     @Test
     void shouldGetMilestones() {
-        server.expect(requestTo("/api/v4/projects/18/milestones"))
+        server.expect(requestTo("http://gitlab.ftabino.it/api/v4/projects/18/milestones"))
               .andRespond(testMethodResponse);
         var page = gitLab.getMilestones(project, null);
         assertThat(page.getContent()).hasSize(2);
@@ -83,8 +80,8 @@ class GitLabTemplateTests {
     static class TemplateConfiguration {
 
         @Bean
-        GitLabTemplate gitLabTemplate(RestTemplateBuilder restTemplateBuilder) {
-            return new GitLabTemplate("<GITLAB_URL>", "<GITLAB_TOKEN>", new RegexLinkParser(), restTemplateBuilder);
+        GitLabTemplate gitLabTemplate(RestClient.Builder builder) {
+            return new GitLabTemplate("http://gitlab.ftabino.it", "glpat-yZC4irM7Lnx3MBJKzLzv", new RegexLinkParser(), builder);
         }
 
     }
