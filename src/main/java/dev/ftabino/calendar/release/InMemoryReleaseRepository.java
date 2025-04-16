@@ -19,7 +19,6 @@ package dev.ftabino.calendar.release;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,10 +60,7 @@ class InMemoryReleaseRepository implements ReleaseRepository {
     }
 
     private Predicate<Release> isWithinPeriod(LocalDate start, LocalDate end) {
-        return (release) -> {
-            LocalDate date = LocalDate.parse(release.date(), DateTimeFormatter.ISO_LOCAL_DATE);
-            return !(date.isBefore(start) || date.isAfter(end));
-        };
+        return (release) -> !(release.date().isBefore(start) || release.date().isAfter(end));
     }
 
 }

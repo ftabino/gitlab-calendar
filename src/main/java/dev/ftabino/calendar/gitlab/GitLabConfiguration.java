@@ -42,7 +42,7 @@ class GitLabConfiguration {
     }
 
     @Bean
-    GitLabReleaseScheduleSource gitHubReleaseScheduleSource(GitLabOperations gitLabOperations) {
+    GitLabReleaseScheduleSource gitLabReleaseScheduleSource(GitLabOperations gitLabOperations) {
         return new GitLabReleaseScheduleSource(gitLabOperations);
     }
 

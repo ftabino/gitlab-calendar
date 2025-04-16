@@ -24,10 +24,10 @@ import java.time.LocalDate;
  *
  * @author Francesco A. Tabino
  */
-public record Release(String project, String name, String date, Status status, URL url) {
+public record Release(String project, String name, LocalDate date, Status status, URL url) {
 
     boolean isOverdue() {
-        return this.status == Status.OPEN && LocalDate.now().isAfter(LocalDate.parse(this.date));
+        return this.status == Status.OPEN && LocalDate.now().isAfter(this.date);
     }
 
     public enum Status {

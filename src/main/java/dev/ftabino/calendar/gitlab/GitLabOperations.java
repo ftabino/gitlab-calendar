@@ -35,7 +35,7 @@ sealed interface GitLabOperations permits GitLabTemplate {
      *
      * @param project         the project
      * @param earlierResponse the first page of an earlier response that can be used to
-     *                        perform conditional requests, or {@code null}.
+     *                        perform conditional requests or {@code null}.
      * @return the page of milestones
      */
     Page<Milestone> getMilestones(Project project, Page<Milestone> earlierResponse);

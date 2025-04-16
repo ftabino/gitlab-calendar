@@ -22,7 +22,6 @@ import dev.ftabino.calendar.release.ReleaseScheduleSource;
 
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +81,7 @@ class GitLabReleaseScheduleSource implements ReleaseScheduleSource {
     private Release createRelease(Project project, Milestone milestone) {
         try {
             return new Release(project.name(), milestone.title(),
-                    milestone.dueDate().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                    milestone.dueDate(),
                     getStatus(milestone),
                     URI.create(milestone.url()).toURL());
         } catch (MalformedURLException ex) {

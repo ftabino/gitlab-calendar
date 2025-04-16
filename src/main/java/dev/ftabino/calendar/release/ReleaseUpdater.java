@@ -46,14 +46,14 @@ class ReleaseUpdater {
 
     @Scheduled(fixedRate = 5 * 60 * 1000)
     void updateReleases() {
-        log.info("Updating releases");
+        log.info("[GITLAB] Updating releases");
         List<Release> releases =
                 getReleaseSchedulesByProject().values()
                                               .stream()
                                               .flatMap((releaseSchedule) -> releaseSchedule.releases().stream())
                                               .toList();
         updateReleases(releases);
-        log.info("Releases updated");
+        log.info("[GITLAB] Releases updated");
     }
 
     private Map<String, ReleaseSchedule> getReleaseSchedulesByProject() {

@@ -4,10 +4,10 @@ The **GitLab Calendar** project provides a calendar containing release dates for
 
 ## Installation
 
-The project is developed using Spring Boot 3.3.0, Java 22 and Gradle 8.8.
+The project is developed using Spring Boot 3.4.4, Java 24 and Gradle 8.13.
 
 ### Prerequisites
-- JDK 22
+- JDK 24
 - GitLab account with a user (bot) and a token for authentication.
 
 ### Installation Steps
